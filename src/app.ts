@@ -11,8 +11,8 @@ import { fetchInitialHashtagFeeds } from './commands';
   const page = await context.newPage();
 
   const fetchFeeds = fetchInitialHashtagFeeds(page);
-  const feeds = await fetchFeeds('신사역맛집');
-  console.log(feeds);
+  const feeds = await fetchFeeds('신사역맛집', 'person');
+  console.log(feeds.map((f) => f.thumbnail));
 
   await browser.close();
   console.log('* browser closed');
