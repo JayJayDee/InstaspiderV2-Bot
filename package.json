@@ -1,0 +1,31 @@
+{
+  "name": "instaspiderv2-bot",
+  "version": "1.0.0",
+  "description": "instaspider-v2 bot with google puppeteer api",
+  "main": "index.js",
+  "scripts": {
+    "dev": "TS_NODE_FILES=true nodemon --watch ./src -e ts --exec ts-node -- --project ./tsconfig.json ./src/app"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/JayJayDee/InstaspiderV2-Bot.git"
+  },
+  "author": "JayJayDee",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/JayJayDee/InstaspiderV2-Bot/issues"
+  },
+  "homepage": "https://github.com/JayJayDee/InstaspiderV2-Bot#readme",
+  "dependencies": {
+    "puppeteer": "^1.14.0"
+  },
+  "devDependencies": {
+    "@types/node": "^11.13.7",
+    "@types/puppeteer": "^1.12.3",
+    "nodemon": "^1.18.11",
+    "ts-node": "^8.1.0",
+    "tslib": "^1.9.3",
+    "tslint": "^5.16.0",
+    "typescript": "^3.4.4"
+  }
+}
