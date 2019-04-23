@@ -4,6 +4,7 @@ import { interceptXhr, initializePage } from '../helpers';
 
 type Feed = {
   id: string;
+  shortid: string;
   url: string;
   thumbnail: string;
   image: string;
@@ -21,6 +22,12 @@ export const likeFeed =
 export const followUser =
   (page: Page) =>
     (userIdNumber: string): Promise<void> =>
+      new Promise((resolve, reject) => {
+      });
+
+export const loginUser =
+  (page: Page) =>
+    (userId: string, password: string): Promise<void> =>
       new Promise((resolve, reject) => {
 
       });
@@ -51,7 +58,8 @@ export const fetchInitialHashtagFeeds =
       });
 
 const convertToFeed = (rawFeed: any): Feed => ({
-  id: rawFeed.node.shortcode,
+  id: rawFeed.node.id,
+  shortid: rawFeed.node.shortcode,
   thumbnail: rawFeed.node.thumbnail_src,
   image: rawFeed.node.display_url,
   url: `https://www.instagram.com/p/${rawFeed.node.shortcode}`,
