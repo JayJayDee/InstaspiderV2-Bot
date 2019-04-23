@@ -1,4 +1,5 @@
 import { launch } from 'puppeteer';
+import { awaitLittle, interceptXhr, initializePage } from './helpers';
 
 (async () => {
   console.log('* browser launching...');
@@ -8,12 +9,17 @@ import { launch } from 'puppeteer';
   console.log('* context created');
 
   const page = await context.newPage();
-  await page.goto('https://www.instagram.com/explore/tags/신사역맛집/');
-  console.log('* page loaded');
 
-  const result = await page.evaluate('window._sharedData');
-  console.log('* fetched data');
-  console.dir(result.entry_data, { depth: null });
+  initializePage(page);
+  const intercept = interceptXhr(page);
+
+  intercept((url, data) => {
+    console.log(`* AJAX ARRIVAL : ${url}`);
+    console.log(data, { depth: null });
+  });
+
+  await page.goto('https://www.instagram.com/explore/tags/신사역맛집/');
+  await awaitLittle(10);
 
   await browser.close();
   console.log('* browser closed');
