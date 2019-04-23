@@ -11,6 +11,20 @@ type Feed = {
   owner_id: string;
 };
 
+export const likeFeed =
+  (page: Page) =>
+    (feedId: string): Promise<void> =>
+      new Promise((resolve, reject) => {
+
+      });
+
+export const followUser =
+  (page: Page) =>
+    (userIdNumber: string): Promise<void> =>
+      new Promise((resolve, reject) => {
+
+      });
+
 export const fetchInitialHashtagFeeds =
   (page: Page) =>
     (hashtag: string, filterText?: string): Promise<Feed[]> =>
