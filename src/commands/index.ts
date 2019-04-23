@@ -1,6 +1,6 @@
 import { Page } from 'puppeteer';
 import { get } from 'lodash';
-import { interceptXhr, initializePage } from '../helpers';
+import { interceptXhrResponse, initializePage } from '../helpers';
 
 type Feed = {
   id: string;
@@ -11,6 +11,19 @@ type Feed = {
   image_desc: string;
   owner_id: string;
 };
+
+// fetch('https://www.instagram.com/web/likes/2023871649813484269/like/', {
+//     method: 'POST',
+//     headers: {
+//       'X-Requested-With': 'XMLHttpRequest',
+//       'X-IG-App-ID': '936619743392459',
+//       'X-Instagram-AJAX': 'd41871c85427',
+//       'X-CSRFToken': 'VVHiz3iJsZ74TcYt90ap84BAaZ7pFGaQ',
+//       'Accept': '*/*',
+//       'Content-Type': 'application/x-www-form-urlencoded'
+//     },
+//     body: {}
+// })
 
 export const likeFeed =
   (page: Page) =>
@@ -37,12 +50,12 @@ export const fetchInitialHashtagFeeds =
     (hashtag: string, filterText?: string): Promise<Feed[]> =>
       new Promise((resolve, reject) => {
         initializePage(page);
-        const intercept = interceptXhr(page);
+        const intercept = interceptXhrResponse(page);
         intercept((url, data: any) => {
           const rawFeeds = get(data, ['graphql', 'hashtag', 'edge_hashtag_to_media', 'edges']);
           if (!rawFeeds) return resolve([]);
 
-          const convertedFeeds: Feed[] = rawFeeds.map(convertToFeed);
+          const convertedFeeds: Feed[] = rawFeeds.map(toFeed);
           if (filterText) {
             const filtered = convertedFeeds.filter((f) => {
               if (!f.image_desc) return false;
@@ -57,7 +70,7 @@ export const fetchInitialHashtagFeeds =
         page.goto(`https://www.instagram.com/explore/tags/${encodeURIComponent(hashtag)}/`);
       });
 
-const convertToFeed = (rawFeed: any): Feed => ({
+const toFeed = (rawFeed: any): Feed => ({
   id: rawFeed.node.id,
   shortid: rawFeed.node.shortcode,
   thumbnail: rawFeed.node.thumbnail_src,

@@ -6,9 +6,9 @@ export const initializePage = (page: Page) => {
 
 type ResponseListener = (url: string, data: JSON) => void | Promise<void>;
 
-export const interceptXhr = (page: Page) =>
+export const interceptXhrResponse = (page: Page) =>
   (listener: ResponseListener, urlFilter?: string) => {
-    console.log('* ajax interceptor set up');
+    console.log('* xhr-response interceptor ready');
     page.on('request', (req) => req.continue());
     page.on('response', async (res) => {
       if (res.request().resourceType() === 'xhr') {
@@ -20,6 +20,26 @@ export const interceptXhr = (page: Page) =>
           listener(uri, jsonExpr);
         }
       }
+    });
+  };
+
+type HeaderListener = (url: string, headers: {[key: string]: string}) => void | Promise<void>;
+type XhrRequestListeners = {
+  header?: HeaderListener;
+};
+export const interceptXhrRequest = (page: Page) =>
+  (listeners: XhrRequestListeners, urlFilter?: string) => {
+    console.log('* xhr-request interceptor ready');
+    page.on('request', async (req) => {
+      const uri = req.url();
+      if ((urlFilter && uri.includes(urlFilter) === true) || !urlFilter) {
+        if (listeners.header) {
+          const headers: {[key: string]: string} = {};
+          Object.keys(req.headers).forEach((k: string) => headers[k] = req.headers()[k]);
+          listeners.header(uri, headers);
+        }
+      }
+      req.continue();
     });
   };
 
