@@ -11,8 +11,10 @@ import { fetchInitialHashtagFeeds } from './commands';
   const page = await context.newPage();
 
   const fetchFeeds = fetchInitialHashtagFeeds(page);
-  const feeds = await fetchFeeds('신사역맛집', 'person');
-  console.log(feeds.map((f) => f.thumbnail));
+  const feeds = await fetchFeeds('신사역맛집', 'food');
+
+  console.log(feeds);
+  console.log(`* number of fetched feeds = ${feeds.length}`);
 
   await browser.close();
   console.log('* browser closed');

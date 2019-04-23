@@ -8,6 +8,7 @@ type Feed = {
   thumbnail: string;
   image: string;
   image_desc: string;
+  owner_id: string;
 };
 
 export const fetchInitialHashtagFeeds =
@@ -36,9 +37,10 @@ export const fetchInitialHashtagFeeds =
       });
 
 const convertToFeed = (rawFeed: any): Feed => ({
-  id: rawFeed.node.id,
+  id: rawFeed.node.shortcode,
   thumbnail: rawFeed.node.thumbnail_src,
   image: rawFeed.node.display_url,
   url: `https://www.instagram.com/p/${rawFeed.node.shortcode}`,
-  image_desc: rawFeed.node.accessibility_caption ? rawFeed.node.accessibility_caption : null
+  image_desc: rawFeed.node.accessibility_caption ? rawFeed.node.accessibility_caption : null,
+  owner_id: rawFeed.node.owner.id
 });
