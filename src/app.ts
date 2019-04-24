@@ -1,5 +1,6 @@
 import { launch } from 'puppeteer';
-import { fetchInitialHashtagFeeds } from './commands';
+
+import credential from './commands/credential';
 
 (async () => {
   console.log('* browser launching...');
@@ -10,11 +11,8 @@ import { fetchInitialHashtagFeeds } from './commands';
 
   const page = await context.newPage();
 
-  const fetchFeeds = fetchInitialHashtagFeeds(page);
-  const feeds = await fetchFeeds('신사역맛집', 'food');
-
-  console.log(feeds);
-  console.log(`* number of fetched feeds = ${feeds.length}`);
+  const resp = await credential(page);
+  console.log(resp);
 
   await browser.close();
   console.log('* browser closed');
