@@ -23,5 +23,9 @@ type Response = {
 };
 
 export default async (page: Page, param: Param): Promise<Response> => {
-  return null;
+  const resp: Response = {
+    credential: null,
+    feeds: null
+  };
+  return resp;
 };
