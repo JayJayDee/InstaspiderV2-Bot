@@ -1,6 +1,5 @@
 import { launch } from 'puppeteer';
-
-import credential from './commands/credential';
+import login from './commands/login';
 
 (async () => {
   console.log('* browser launching...');
@@ -10,9 +9,10 @@ import credential from './commands/credential';
   console.log('* context created');
 
   const page = await context.newPage();
-
-  const resp = await credential(page);
-  console.log(resp);
+  await login(page, {
+    id: 'jindongp',
+    password: 'hu77lzg5'
+  });
 
   await browser.close();
   console.log('* browser closed');
