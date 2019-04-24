@@ -2,12 +2,14 @@ import { launch } from 'puppeteer';
 import login from './commands/login';
 import fetchFeeds from './commands/feeds';
 import like from './commands/like';
+import follow from './commands/follow-someone';
+import wait from './helpers/await';
 
 (async () => {
   console.log('* browser launching...');
   const browser = await launch({
     headless: false,
-    args: ['--lang=ko-KR, ko']
+    args: ['--lang=ko-KR, ko', '--no-sandbox', '--disable-setuid-sandbox']
   });
   console.log('* browser launched');
   const context = await browser.defaultBrowserContext();
@@ -27,11 +29,11 @@ import like from './commands/like';
   const feed = feeds[0];
   console.log(feed);
   await like(page, feed.id);
+  await wait(2);
+  await follow(page, feed.ownerId);
 
   await awaitForever();
 })();
 
 const awaitForever = () =>
-  new Promise((resolve, reject) => {
-
-  });
+  new Promise((resolve, reject) => {});
