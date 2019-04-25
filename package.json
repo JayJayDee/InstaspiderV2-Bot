@@ -4,7 +4,8 @@
   "description": "instaspider-v2 bot with google puppeteer api",
   "main": "index.js",
   "scripts": {
-    "dev": "TS_NODE_FILES=true nodemon --watch ./src -e ts --exec ts-node -- --project ./tsconfig.json ./src/app"
+    "dev": "CONFIG_PATH=$HOME/insta-v2-bot-conf.json TS_NODE_FILES=true nodemon --watch ./src -e ts --exec ts-node -- --project ./tsconfig.json ./src/app",
+    "start": "TS_NODE_FILES=true nodemon --watch ./src -e ts --exec ts-node -- --project ./tsconfig.json ./src/app"
   },
   "repository": {
     "type": "git",
