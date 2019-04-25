@@ -7,10 +7,10 @@ export default async (page: Page, ownerIdNumber: string) => {
     fetch('/web/friendships/${ownerIdNumber}/follow/', {
       method: 'POST',
       headers: {
-        'x-csrftoken': '${csrfToken}'
+        'X-CSRFToken': '${csrfToken}'
       }
     });
   `;
   await page.evaluate(script);
-  console.log(`* liked to owner: ${ownerIdNumber}`);
+  console.log(`* followed to owner: ${ownerIdNumber}`);
 };

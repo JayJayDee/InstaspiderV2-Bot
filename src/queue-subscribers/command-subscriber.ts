@@ -65,6 +65,8 @@ const handleHashtag = (page: Page, channel: Channel) =>
       thumbnail: f.thumbnailUri,
       url: f.feedUri
     }));
+    console.log('* fetched feeds');
+    console.log(filteredFeeds);
     await sendResponse(channel, {
       type: 'hashtag_ok',
       feeds: filteredFeeds
@@ -76,7 +78,7 @@ const handleInteraction = (page: Page, channel: Channel) =>
     console.log('* feeds-interaction process started');
     const interactions = payload.interactionList as any[];
     for (let interaction of interactions) {
-      await likeFeed(page, interaction.feed_id);
+      await likeFeed(page, interaction.feed_id, interaction.url);
       await sendResponse(channel, {
         type: 'interaction_like_ok',
         feed_id: interaction.feed_id
