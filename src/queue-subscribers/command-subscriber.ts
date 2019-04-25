@@ -3,6 +3,9 @@ import { Page } from 'puppeteer';
 
 import loginCommand from '../commands/login';
 import fetchFeeds from '../commands/feeds';
+import likeFeed from '../commands/like';
+import followSomeone from '../commands/follow-someone';
+import wait from '../helpers/await';
 
 const queueName = 'command';
 
@@ -16,8 +19,6 @@ export default (connection: Connection, page: Page) =>
       const hahstag = handleHashtag(page, channel);
       const interact = handleInteraction(page, channel);
 
-      console.log(interact);
-
       let parsed: any = null;
       try {
         parsed = JSON.parse(msg.content.toString());
@@ -25,6 +26,7 @@ export default (connection: Connection, page: Page) =>
         console.log(parsed);
         if (parsed.type === 'login') login(parsed);
         if (parsed.type === 'hashtag') hahstag(parsed);
+        if (parsed.type === 'interaction') interact(parsed);
       } catch (err) {
         console.log('* invalid payload. ignored.');
       }
@@ -63,7 +65,6 @@ const handleHashtag = (page: Page, channel: Channel) =>
       thumbnail: f.thumbnailUri,
       url: f.feedUri
     }));
-    console.log(filteredFeeds);
     await sendResponse(channel, {
       type: 'hashtag_ok',
       feeds: filteredFeeds
@@ -73,4 +74,20 @@ const handleHashtag = (page: Page, channel: Channel) =>
 const handleInteraction = (page: Page, channel: Channel) =>
   async (payload: any) => {
     console.log('* feeds-interaction process started');
+    const interactions = payload.interactionList as any[];
+    for (let interaction of interactions) {
+      await likeFeed(page, interaction.feed_id);
+      await sendResponse(channel, {
+        type: 'interaction_like_ok',
+        feed_id: interaction.feed_id
+      });
+      await wait(1);
+
+      await followSomeone(page, interaction.owner_id);
+      await sendResponse(channel, {
+        type: 'interaction_follow_ok',
+        owner_id: interaction.owner_id
+      });
+      await wait(1);
+    }
   };
