@@ -1,4 +1,4 @@
-import { RootConfig, AmqpConfig } from "./types";
+import { RootConfig, AmqpConfig } from './types';
 
 let root: RootConfig = null;
 const rootConfig = async (): Promise<RootConfig> => {

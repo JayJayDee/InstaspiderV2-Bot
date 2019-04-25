@@ -1,1 +1,1 @@
-export { default as loginSubscriber } from './login-subscriber';
+export { default as commandSubscriber } from './command-subscriber';

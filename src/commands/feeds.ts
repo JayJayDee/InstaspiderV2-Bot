@@ -53,7 +53,7 @@ export default async (page: Page, param: Param): Promise<Feed[]> =>
 const toFeed = (rawFeed: any): Feed => ({
   id: rawFeed.node.id,
   shortCode: rawFeed.node.shortcode,
-  thumbnailUri: rawFeed.node.thumbnail_src,
+  thumbnailUri: rawFeed.node.thumbnail_resources[rawFeed.node.thumbnail_resources.length - 1].src,
   imageUri: rawFeed.node.display_url,
   caption: rawFeed.node.accessibility_caption,
   feedUri: `https://www.instagram.com/p/${rawFeed.node.shortcode}/`,
