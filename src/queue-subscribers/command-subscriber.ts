@@ -14,6 +14,9 @@ export default (connection: Connection, page: Page) =>
     await channel.consume('command', async (msg) => {
       const login = handleLogin(page, channel);
       const hahstag = handleHashtag(page, channel);
+      const interact = handleInteraction(page, channel);
+
+      console.log(interact);
 
       let parsed: any = null;
       try {
@@ -56,11 +59,18 @@ const handleHashtag = (page: Page, channel: Channel) =>
     });
     const filteredFeeds = feeds.map((f) => ({
       id: f.id,
-      thumbnail: f.thumbnailUri
+      owner_id: f.ownerId,
+      thumbnail: f.thumbnailUri,
+      url: f.feedUri
     }));
     console.log(filteredFeeds);
     await sendResponse(channel, {
       type: 'hashtag_ok',
       feeds: filteredFeeds
     });
+  };
+
+const handleInteraction = (page: Page, channel: Channel) =>
+  async (payload: any) => {
+    console.log('* feeds-interaction process started');
   };
