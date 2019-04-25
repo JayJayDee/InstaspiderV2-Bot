@@ -29,8 +29,10 @@ export default (connection: Connection, page: Page) =>
   };
 
 const sendResponse = async (channel: Channel, payload: any) => {
+  const type = payload.type;
   await channel.assertQueue('bot_response');
   await channel.sendToQueue('bot_response', Buffer.from(JSON.stringify(payload)));
+  console.log(`* bot_response written: ${type}`);
 };
 
 const handleLogin = (page: Page, channel: Channel) =>
