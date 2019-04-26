@@ -1,10 +1,12 @@
 import { Connection, Channel } from 'amqplib';
 import { Page } from 'puppeteer';
+import { shuffle } from 'lodash';
 
 import loginCommand from '../commands/login';
 import fetchFeeds from '../commands/feeds';
 import likeFeed from '../commands/like';
 import followSomeone from '../commands/follow-someone';
+import writeComment from '../commands/comment';
 import wait from '../helpers/await';
 
 const queueName = 'command';
@@ -91,5 +93,23 @@ const handleInteraction = (page: Page, channel: Channel) =>
         owner_id: interaction.owner_id
       });
       await wait(1);
+
+      await writeComment(page, {
+        feedId: interaction.feed_id,
+        comment: randomComment()
+      });
+      await sendResponse(channel, {
+        type: 'interaction_comment_ok',
+        feed_id: interaction.feed_id
+      });
+      await wait(1);
     }
   };
+
+const comments = [
+  '잇님😀 맛있어 보이네요 오늘 가서 먹어보고 싶네요',
+  '소통하고 싶어 팔로우 하고 갑니다',
+  '음식사진 너무 좋아서 팔로우 하고 가요!',
+  '너무 맛있어 보이네요!'
+];
+const randomComment = (): string => shuffle(comments)[0];
